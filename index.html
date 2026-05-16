@@ -229,7 +229,7 @@ button:active { transform: translateY(5px); box-shadow: 0 5px 0 #b72f69, 0 10px 
   };
 
   const yang = {
-    x: 220, y: 260, vx: 0, vy: 0, r: 26,
+    x: 220, y: 260, vx: 0, vy: 0, r: 30,
     speed: 245, face: 1, blink: 0, happy: 0
   };
 
@@ -771,354 +771,342 @@ button:active { transform: translateY(5px); box-shadow: 0 5px 0 #b72f69, 0 10px 
     const speed = Math.min(1, Math.hypot(yang.vx, yang.vy) / yang.speed);
     const bounce = Math.sin(t * 10) * speed * 3;
     const walk = Math.sin(t * 12) * speed;
-    const idleSway = Math.sin(t * 2.2) * 0.6 * (1 - speed);
+    const idleBreathe = Math.sin(t * 2.2) * 0.6 * (1 - speed);
+    const smile = yang.happy;
 
     ctx.save();
     ctx.translate(yang.x, yang.y + bounce);
+    ctx.scale(1.12, 1.12);
 
-    // Ground shadow (un-mirrored, soft and oval)
+    // Ground shadow
     ctx.save();
     ctx.globalAlpha = .28;
     ctx.fillStyle = '#6d455f';
-    ellipse(0, 42, 28, 6.5, true);
-    ctx.globalAlpha = .14;
-    ellipse(0, 42, 34, 8.5, true);
+    ellipse(0, 46, 32, 7.5, true);
+    ctx.globalAlpha = .12;
+    ellipse(0, 46, 40, 10, true);
     ctx.restore();
 
     ctx.scale(yang.face, 1);
 
-    // === LEGS (chibi short) ===
-    ctx.fillStyle = palette.skin;
-    roundedRect(-9 + walk * 2, 26, 7, 11, 3, true);
-    roundedRect(2 - walk * 2, 26, 7, 11, 3, true);
-    // Mary-Jane shoes
-    ctx.fillStyle = '#ff8fb6';
-    roundedRect(-10.5 + walk * 2, 34, 10, 5.5, 2.5, true);
-    roundedRect(0.5 - walk * 2, 34, 10, 5.5, 2.5, true);
-    // shoe straps
-    ctx.fillStyle = '#ffd5e3';
-    roundedRect(-9.5 + walk * 2, 33, 8, 1.4, 0.7, true);
-    roundedRect(1.5 - walk * 2, 33, 8, 1.4, 0.7, true);
-    // ankle bow dots
-    ctx.fillStyle = '#fff';
-    circle(-5.5 + walk * 2, 33.7, 1);
-    circle(5.5 - walk * 2, 33.7, 1);
-
-    // === BACK HAIR (short bob — ends at jaw, not past shoulders) ===
-    const backHair = ctx.createLinearGradient(0, -44, 0, 8);
-    backHair.addColorStop(0, palette.hairDark);
-    backHair.addColorStop(0.7, palette.hairMid);
-    backHair.addColorStop(1, palette.hairWarm);
-    ctx.fillStyle = backHair;
+    // === LONG FLOWING BACK HAIR ===
+    const hairGrad = ctx.createLinearGradient(0, -55, 0, 40);
+    hairGrad.addColorStop(0, '#0d0a0e');
+    hairGrad.addColorStop(0.35, '#231716');
+    hairGrad.addColorStop(0.7, '#4a2820');
+    hairGrad.addColorStop(1, '#8b5535');
+    ctx.fillStyle = hairGrad;
     ctx.beginPath();
     ctx.moveTo(-22, -34);
-    ctx.bezierCurveTo(-27, -22, -26, -2, -22, 6);
-    ctx.bezierCurveTo(-14, 9, 14, 9, 22, 6);
-    ctx.bezierCurveTo(26, -2, 27, -22, 22, -34);
-    ctx.bezierCurveTo(14, -48, -14, -48, -22, -34);
+    ctx.bezierCurveTo(-36, -18, -34, 28, -22, 42);
+    ctx.bezierCurveTo(-12, 50, 12, 50, 22, 42);
+    ctx.bezierCurveTo(34, 28, 36, -18, 22, -34);
+    ctx.bezierCurveTo(12, -53, -12, -53, -22, -34);
     ctx.closePath();
     ctx.fill();
 
-    // === DRESS (cream A-line sundress) ===
-    const dressGrad = ctx.createLinearGradient(0, -3, 0, 32);
-    dressGrad.addColorStop(0, palette.dressLight);
-    dressGrad.addColorStop(0.6, palette.dressShade);
-    dressGrad.addColorStop(1, palette.dressDeep);
-    ctx.fillStyle = dressGrad;
-    ctx.strokeStyle = '#ffffff';
-    ctx.lineWidth = 1.6;
+    // Long side locks framing the face
+    ctx.fillStyle = hairGrad;
     ctx.beginPath();
-    ctx.moveTo(-14, -3);
-    ctx.quadraticCurveTo(-20, 12, -24, 30);
-    ctx.quadraticCurveTo(0, 35, 24, 30);
-    ctx.quadraticCurveTo(20, 12, 14, -3);
-    ctx.quadraticCurveTo(0, -7, -14, -3);
+    ctx.moveTo(-22, -32);
+    ctx.bezierCurveTo(-36, -14, -35, 24, -23, 44);
+    ctx.bezierCurveTo(-17, 38, -16, 15, -18, -4);
+    ctx.bezierCurveTo(-20, -20, -21, -28, -22, -32);
+    ctx.closePath();
+    ctx.fill();
+    ctx.beginPath();
+    ctx.moveTo(22, -32);
+    ctx.bezierCurveTo(36, -14, 35, 24, 23, 44);
+    ctx.bezierCurveTo(17, 38, 16, 15, 18, -4);
+    ctx.bezierCurveTo(20, -20, 21, -28, 22, -32);
+    ctx.closePath();
+    ctx.fill();
+
+    // === ELEGANT LONG LEGS ===
+    ctx.fillStyle = '#ffe3cf';
+    roundedRect(-8 + walk * 2, 28, 6.5, 16, 3, true);
+    roundedRect(2 - walk * 2, 28, 6.5, 16, 3, true);
+    // High heels
+    ctx.fillStyle = '#d42a5c';
+    ctx.beginPath();
+    ctx.moveTo(-11 + walk * 2, 44); ctx.lineTo(-5 + walk * 2, 44);
+    ctx.lineTo(-3 + walk * 2, 48); ctx.lineTo(-13 + walk * 2, 48);
+    ctx.closePath(); ctx.fill();
+    ctx.beginPath();
+    ctx.moveTo(5 - walk * 2, 44); ctx.lineTo(11 - walk * 2, 44);
+    ctx.lineTo(13 - walk * 2, 48); ctx.lineTo(3 - walk * 2, 48);
+    ctx.closePath(); ctx.fill();
+    // heel spike
+    ctx.fillStyle = '#a81e46';
+    ctx.fillRect(-7 + walk * 2, 47, 2, 3);
+    ctx.fillRect(5 - walk * 2, 47, 2, 3);
+
+    // === FORM-FITTING QIPAO ===
+    const qipao = ctx.createLinearGradient(0, -8, 0, 36);
+    qipao.addColorStop(0, '#ff4068');
+    qipao.addColorStop(0.4, '#d42452');
+    qipao.addColorStop(1, '#8a1036');
+    ctx.fillStyle = qipao;
+    ctx.strokeStyle = '#ffd05a';
+    ctx.lineWidth = 1.2;
+    ctx.beginPath();
+    // Qipao silhouette: fitted bodice, slim waist, elegant flare
+    ctx.moveTo(-12, -6);
+    ctx.quadraticCurveTo(-16, 2, -14, 12);
+    ctx.quadraticCurveTo(-12, 18, -10, 24);
+    ctx.quadraticCurveTo(-16, 30, -19, 39);
+    ctx.quadraticCurveTo(-14, 44, 0, 46);
+    ctx.quadraticCurveTo(14, 44, 19, 39);
+    ctx.quadraticCurveTo(16, 30, 10, 24);
+    ctx.quadraticCurveTo(12, 18, 14, 12);
+    ctx.quadraticCurveTo(16, 2, 12, -6);
+    ctx.quadraticCurveTo(0, -10, -12, -6);
     ctx.closePath();
     ctx.fill();
     ctx.stroke();
 
-    // dress straps
-    ctx.strokeStyle = palette.dressLight; ctx.lineWidth = 2.2; ctx.lineCap = 'round';
-    line(-9, -4, -10, -11);
-    line(9, -4, 10, -11);
+    // Side slit revealing leg
+    ctx.fillStyle = '#ffe3cf';
+    ctx.beginPath();
+    ctx.moveTo(-18, 32);
+    ctx.quadraticCurveTo(-12, 42, -8, 45);
+    ctx.quadraticCurveTo(-4, 45, -8, 40);
+    ctx.quadraticCurveTo(-14, 30, -18, 32);
+    ctx.closePath();
+    ctx.fill();
 
-    // dress pleats
+    // Gold trim and mandarin collar
+    ctx.strokeStyle = '#ffd05a'; ctx.lineWidth = 1; ctx.lineCap = 'round';
+    // collar line
+    ctx.beginPath();
+    ctx.moveTo(-6, -7); ctx.quadraticCurveTo(0, -3, 6, -7); ctx.stroke();
+    // frog buttons down the side
+    ctx.fillStyle = '#ffd05a';
+    circle(11, 4, 1); circle(11, 10, 1); circle(11, 16, 1);
+
+    // Qipao floral/cloud embroidery
     ctx.save();
-    ctx.globalAlpha = .28;
-    ctx.strokeStyle = '#b69b7c'; ctx.lineWidth = 1;
-    line(-10, 5, -17, 28);
-    line(-3, 3, -4, 30);
-    line(4, 3, 5, 30);
-    line(10, 5, 17, 28);
+    ctx.globalAlpha = .45;
+    ctx.fillStyle = '#ffb8cc';
+    ctx.beginPath();
+    ctx.arc(-4, 14, 3, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath();
+    ctx.arc(6, 8, 2.5, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath();
+    ctx.arc(0, 22, 2, 0, Math.PI * 2); ctx.fill();
     ctx.restore();
 
-    // scalloped hem dots
-    ctx.fillStyle = '#ffd5e3';
-    for (let i = -21; i <= 21; i += 6) circle(i, 31, 1.1);
-
-    // dress ribbon waist
-    ctx.fillStyle = '#ffb3cf';
-    roundedRect(-16, 6, 32, 3.5, 1.6, true);
-    ctx.fillStyle = '#ff8eb8';
-    ctx.beginPath();
-    ctx.moveTo(-2, 7.7); ctx.lineTo(-7, 4); ctx.lineTo(-7, 11); ctx.closePath(); ctx.fill();
-    ctx.beginPath();
-    ctx.moveTo(2, 7.7); ctx.lineTo(7, 4); ctx.lineTo(7, 11); ctx.closePath(); ctx.fill();
-    ctx.fillStyle = '#ffd5e3'; circle(0, 7.8, 1.6);
-    ctx.fillStyle = 'rgba(255,255,255,.8)'; circle(-0.5, 7.4, 0.6);
-
-    // === ARMS ===
-    ctx.fillStyle = palette.skin;
-    // left arm — gentle sway
+    // === ELEGANT ARMS ===
+    // Left arm — graceful pose
     ctx.save();
-    ctx.translate(-12, -1);
-    ctx.rotate(0.25 + Math.sin(t * 4) * 0.08 + idleSway * 0.05);
-    roundedRect(-3, 0, 6, 14, 3, true);
+    ctx.translate(-13, 0);
+    ctx.rotate(0.22 + Math.sin(t * 3.5) * 0.06 + idleBreathe * 0.04);
+    ctx.fillStyle = '#ffe3cf';
+    roundedRect(-2.5, 0, 4.5, 16, 2.2, true);
+    // delicate hand
+    ctx.fillStyle = '#ffe3cf';
+    circle(-1, 17, 2.3);
     ctx.restore();
-    // right arm with tiny phone
+
+    // Right arm with phone — more elegant angle
     ctx.save();
-    ctx.translate(12, -1);
-    ctx.rotate(-0.5 - yang.happy * 0.2);
-    roundedRect(-3, 0, 6, 14, 3, true);
-    // tiny phone
-    ctx.translate(1, 13);
-    ctx.rotate(0.3);
+    ctx.translate(13, 0);
+    ctx.rotate(-0.45 - smile * 0.15);
+    ctx.fillStyle = '#ffe3cf';
+    roundedRect(-2, 0, 4.5, 16, 2.2, true);
+    ctx.fillStyle = '#ffe3cf';
+    circle(1, 17, 2.3);
+    // sleek phone
+    ctx.translate(1, 18);
+    ctx.rotate(0.22);
     ctx.fillStyle = '#fff';
-    roundedRect(-3, -4.5, 6, 9, 1.4, true);
-    ctx.strokeStyle = '#b6a8c8'; ctx.lineWidth = 0.7;
-    roundedRect(-3, -4.5, 6, 9, 1.4, false);
-    ctx.fillStyle = '#ffd5e3';
-    roundedRect(-2.4, -3.8, 4.8, 7.5, 0.9, true);
-    ctx.fillStyle = '#ff8fb6';
-    circle(0, 0, 0.9);
+    roundedRect(-3.2, -5.2, 6.4, 10, 1.5, true);
+    ctx.strokeStyle = '#d4a8c0'; ctx.lineWidth = .6;
+    roundedRect(-3.2, -5.2, 6.4, 10, 1.5, false);
+    ctx.fillStyle = '#ffe0ec';
+    roundedRect(-2.4, -4.2, 4.8, 7.8, 1, true);
+    ctx.fillStyle = '#ff5f91';
+    circle(0, .2, .9);
     ctx.fillStyle = 'rgba(255,255,255,.85)';
-    circle(-0.6, -0.8, 0.45);
+    circle(-.6, -.7, .4);
     ctx.restore();
 
-    // === HEAD (big chibi face) ===
-    ctx.fillStyle = palette.skin;
+    // === FACE — softer, more beautiful proportions ===
+    ctx.fillStyle = '#ffe8d6';
     ctx.beginPath();
-    ctx.ellipse(0, -22, 22, 24, 0, 0, Math.PI * 2);
+    ctx.ellipse(0, -24, 20, 24, 0, 0, Math.PI * 2);
     ctx.fill();
-    // soft jaw shading
+    // Subtle jaw contour
     ctx.save();
-    ctx.globalAlpha = 0.12;
-    ctx.fillStyle = palette.skinShade;
-    ctx.beginPath();
-    ctx.ellipse(0, -7, 18, 6, 0, 0, Math.PI);
-    ctx.fill();
+    ctx.globalAlpha = .1;
+    ctx.fillStyle = '#e89f7d';
+    ctx.beginPath(); ctx.ellipse(0, -10, 15, 5.5, 0, 0, Math.PI); ctx.fill();
     ctx.restore();
-    // Soft forehead warmth. Keep subtle so the fuller bangs read as hair, not a bald shine.
+
+    // Jade necklace
     ctx.save();
-    ctx.globalAlpha = 0.16;
-    ctx.fillStyle = '#fff5e8';
-    ctx.beginPath();
-    ctx.ellipse(0, -27, 6, 2, 0, 0, Math.PI * 2);
-    ctx.fill();
+    ctx.strokeStyle = 'rgba(255,255,255,.92)'; ctx.lineWidth = .85;
+    ctx.beginPath(); ctx.arc(0, -5, 7.5, .18, Math.PI - .18); ctx.stroke();
+    ctx.fillStyle = '#5cd8b5';
+    ctx.beginPath(); ctx.ellipse(0, 2.5, 2, 2.6, 0, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = 'rgba(255,255,255,.78)'; circle(-.6, 1.8, .6);
     ctx.restore();
 
-    // === NECKLACE (gold heart) ===
-    ctx.save();
-    ctx.strokeStyle = 'rgba(255,255,255,.9)'; ctx.lineWidth = 0.9;
-    ctx.beginPath(); ctx.arc(0, -3, 8, 0.25, Math.PI - 0.25); ctx.stroke();
-    ctx.fillStyle = '#ffd24a';
-    ctx.beginPath();
-    ctx.moveTo(0, 6);
-    ctx.bezierCurveTo(-3, 2, -3, -1, 0, 1.4);
-    ctx.bezierCurveTo(3, -1, 3, 2, 0, 6);
-    ctx.fill();
-    ctx.fillStyle = 'rgba(255,255,255,.75)';
-    circle(-0.8, 2.2, 0.6);
-    ctx.restore();
-
-    // === FULLER SHORT BOB + SOFT BANGS ===
-    // Fill the top hairline so she reads as pretty/cute, not bald, while keeping eyes clear.
-    ctx.fillStyle = backHair;
-
-    // rounded front hair cap, drawn over the top of the face but stopping above eyebrows
+    // === FRONT HAIR — luxurious, sweeping ===
+    ctx.fillStyle = hairGrad;
+    // elegant updo / side-swept bangs
     ctx.beginPath();
     ctx.moveTo(-22, -35);
-    ctx.bezierCurveTo(-18, -48, 18, -48, 22, -35);
-    ctx.bezierCurveTo(21, -31, 15, -29, 8, -28);
-    ctx.bezierCurveTo(3, -27, -3, -27, -8, -28);
-    ctx.bezierCurveTo(-15, -29, -21, -31, -22, -35);
+    ctx.bezierCurveTo(-17, -54, 17, -54, 22, -35);
+    ctx.bezierCurveTo(17, -28, 8, -26, 0, -27);
+    ctx.bezierCurveTo(-8, -26, -17, -28, -22, -35);
     ctx.closePath();
     ctx.fill();
 
-    // plush side bob pieces: fuller temples/jaw frame, safely outside eyes and cheeks
-    ctx.beginPath();
-    ctx.moveTo(-22, -33);
-    ctx.bezierCurveTo(-29, -20, -27, 2, -20, 9);
-    ctx.bezierCurveTo(-16, 8, -15, -1, -17, -11);
-    ctx.bezierCurveTo(-18, -22, -20, -29, -22, -33);
-    ctx.closePath();
-    ctx.fill();
-    ctx.beginPath();
-    ctx.moveTo(22, -33);
-    ctx.bezierCurveTo(29, -20, 27, 2, 20, 9);
-    ctx.bezierCurveTo(16, 8, 15, -1, 17, -11);
-    ctx.bezierCurveTo(18, -22, 20, -29, 22, -33);
-    ctx.closePath();
-    ctx.fill();
+    // Sweeping side bangs
+    const sweepBangs = [
+      [-19, -38, -18, -28, -10, -25, -5, -41],
+      [-8, -43, -10, -30, -2, -24, 4, -43],
+      [2, -44, -1, -32, 5, -25, 12, -40],
+      [10, -40, 8, -30, 16, -25, 22, -37]
+    ];
+    for (const b of sweepBangs) {
+      ctx.beginPath();
+      ctx.moveTo(b[0], b[1]);
+      ctx.bezierCurveTo(b[2], b[3], b[4], b[5], b[6], b[7]);
+      ctx.bezierCurveTo(b[6] - 4, b[7] - 5, b[0] + 2, b[1] - 4, b[0], b[1]);
+      ctx.closePath();
+      ctx.fill();
+    }
 
-    // cute layered fringe: several soft strands stop above eyes, removing the "half bald" forehead
-    ctx.beginPath();
-    ctx.moveTo(-19, -37);
-    ctx.bezierCurveTo(-18, -31, -15, -27, -10, -26);
-    ctx.bezierCurveTo(-9, -31, -6, -36, -2, -40);
-    ctx.bezierCurveTo(-8, -44, -15, -43, -19, -37);
-    ctx.closePath();
-    ctx.fill();
-
-    ctx.beginPath();
-    ctx.moveTo(0, -41);
-    ctx.bezierCurveTo(-4, -35, -3, -30, 0, -27);
-    ctx.bezierCurveTo(3, -30, 4, -35, 0, -41);
-    ctx.closePath();
-    ctx.fill();
-
-    ctx.beginPath();
-    ctx.moveTo(19, -37);
-    ctx.bezierCurveTo(18, -31, 15, -27, 10, -26);
-    ctx.bezierCurveTo(9, -31, 6, -36, 2, -40);
-    ctx.bezierCurveTo(8, -44, 15, -43, 19, -37);
-    ctx.closePath();
-    ctx.fill();
-
-    // tiny curved baby hairs at the temples for a softer, prettier silhouette
+    // Hair highlights
     ctx.save();
-    ctx.strokeStyle = palette.hairMid;
-    ctx.lineWidth = 1.1;
-    ctx.lineCap = 'round';
-    ctx.beginPath(); ctx.moveTo(-17, -29); ctx.quadraticCurveTo(-20, -25, -18, -21); ctx.stroke();
-    ctx.beginPath(); ctx.moveTo(17, -29); ctx.quadraticCurveTo(20, -25, 18, -21); ctx.stroke();
+    ctx.globalAlpha = .28;
+    ctx.fillStyle = '#c48a62';
+    ctx.beginPath(); ctx.ellipse(-8, -46, 5, 1.5, -.2, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.ellipse(9, -46, 5, 1.5, .2, 0, Math.PI * 2); ctx.fill();
+    ctx.globalAlpha = .18;
+    ctx.beginPath(); ctx.ellipse(-24, -4, 1.2, 13, -.06, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.ellipse(24, -4, 1.2, 13, .06, 0, Math.PI * 2); ctx.fill();
     ctx.restore();
 
-    // hair shine highlights
-    ctx.save();
-    ctx.globalAlpha = 0.34;
-    ctx.fillStyle = palette.hairHi;
-    ctx.beginPath();
-    ctx.ellipse(-11, -41, 5, 1.7, -0.3, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.beginPath();
-    ctx.ellipse(11, -41, 5, 1.7, 0.3, 0, Math.PI * 2);
-    ctx.fill();
-    // side tuft highlights
-    ctx.globalAlpha = 0.22;
-    ctx.beginPath();
-    ctx.ellipse(-20, -12, 1.2, 7, -0.1, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.beginPath();
-    ctx.ellipse(20, -12, 1.2, 7, 0.1, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.restore();
-
-    // little pink hair flower
-    ctx.save();
-    ctx.translate(-15, -38);
-    ctx.fillStyle = '#ff8fb6';
+    // Cherry blossom hairpin
+    ctx.fillStyle = '#ff7799';
     for (let i = 0; i < 5; i++) {
-      ctx.beginPath();
       const a = (i / 5) * Math.PI * 2;
-      ctx.ellipse(Math.cos(a) * 2.6, Math.sin(a) * 2.6, 2.2, 1.5, a, 0, Math.PI * 2);
+      ctx.beginPath();
+      ctx.ellipse(-17 + Math.cos(a) * 2.5, -48 + Math.sin(a) * 2.5, 2, 1.1, a, 0, Math.PI * 2);
       ctx.fill();
     }
-    ctx.fillStyle = '#ffd95e';
-    circle(0, 0, 1.5);
-    ctx.fillStyle = 'rgba(255,255,255,.8)';
-    circle(-0.5, -0.5, 0.6);
+    ctx.fillStyle = '#ffd05a';
+    circle(-17, -48, 1.3);
+    // Jade hair stick
+    ctx.strokeStyle = '#5cd8b5'; ctx.lineWidth = 1.6; ctx.lineCap = 'round';
+    ctx.beginPath();
+    ctx.moveTo(20, -52); ctx.lineTo(12, -40);
+    ctx.stroke();
+    ctx.fillStyle = '#ff4f75';
+    circle(20, -52, 1.4);
+
+    // === BEAUTIFUL FACE FEATURES ===
+    // Elegant eyebrows
+    ctx.strokeStyle = '#3a1f1a'; ctx.lineWidth = 1.2; ctx.lineCap = 'round';
+    ctx.beginPath(); ctx.moveTo(-13, -29.5); ctx.quadraticCurveTo(-8, -31.5, -3, -30); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(13, -29.5); ctx.quadraticCurveTo(8, -31.5, 3, -30); ctx.stroke();
+
+    if (yang.blink > 0) {
+      ctx.strokeStyle = '#1c100e'; ctx.lineWidth = 1.7; ctx.lineCap = 'round';
+      ctx.beginPath(); ctx.moveTo(-12.5, -22); ctx.quadraticCurveTo(-8, -19, -3.5, -22); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(12.5, -22); ctx.quadraticCurveTo(8, -19, 3.5, -22); ctx.stroke();
+      // long lashes visible when blinking
+      ctx.strokeStyle = '#1c100e'; ctx.lineWidth = .9;
+      line(-12.5, -22, -13.8, -23.5); line(12.5, -22, 13.8, -23.5);
+    } else {
+      // Big, captivating eyes with long lashes
+      ctx.fillStyle = '#fffaf7';
+      ellipse(-8, -22.5, 4.8, 6.4, true);
+      ellipse(8, -22.5, 4.8, 6.4, true);
+      const irisGrad = ctx.createLinearGradient(0, -28, 0, -17);
+      irisGrad.addColorStop(0, '#1a0f0e');
+      irisGrad.addColorStop(.5, '#602820');
+      irisGrad.addColorStop(1, '#c96e3d');
+      ctx.fillStyle = irisGrad;
+      ellipse(-8, -22.3, 3.9, 5.6, true);
+      ellipse(8, -22.3, 3.9, 5.6, true);
+      ctx.fillStyle = '#120a0c';
+      circle(-8, -22.5, 2.3);
+      circle(8, -22.5, 2.3);
+      // dual sparkle for beauty
+      ctx.fillStyle = '#fff';
+      circle(-9.6, -25.2, 1.35); circle(-6.8, -25.2, .7);
+      circle(9.6, -25.2, 1.35); circle(6.8, -25.2, .7);
+      ctx.fillStyle = 'rgba(255,255,255,.82)';
+      circle(-6.2, -20.2, .75); circle(9.8, -20.2, .75);
+      // elegant upper lashes
+      ctx.strokeStyle = '#1c100e'; ctx.lineWidth = 1.3; ctx.lineCap = 'round';
+      ctx.beginPath(); ctx.moveTo(-13, -26); ctx.quadraticCurveTo(-9, -28, -4, -26.8); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(13, -26); ctx.quadraticCurveTo(9, -28, 4, -26.8); ctx.stroke();
+      // wing tips
+      line(-13, -25, -15.2, -26.2); line(13, -25, 15.2, -26.2);
+    }
+
+    // Rosy blush — more refined
+    ctx.fillStyle = 'rgba(255,110,140,.5)';
+    ellipse(-13, -15, 3.8, 2.3, true);
+    ellipse(13, -15, 3.8, 2.3, true);
+    // subtle highlight on blush
+    ctx.save();
+    ctx.strokeStyle = 'rgba(255,255,255,.55)'; ctx.lineWidth = .6;
+    line(-15, -15.5, -12.2, -16); line(14, -15.5, 11.2, -16);
     ctx.restore();
 
-    // === FACE FEATURES ===
-    // Eyebrows
-    ctx.strokeStyle = '#4a2a1c'; ctx.lineWidth = 1.5; ctx.lineCap = 'round';
-    ctx.beginPath(); ctx.moveTo(-12, -29); ctx.quadraticCurveTo(-8, -31.2, -4, -29); ctx.stroke();
-    ctx.beginPath(); ctx.moveTo(12, -29); ctx.quadraticCurveTo(8, -31.2, 4, -29); ctx.stroke();
+    // Elegant nose
+    ctx.fillStyle = 'rgba(170,95,78,.35)';
+    circle(0, -15.2, .6);
 
-    // Eyes — big sparkly chibi eyes
-    if (yang.blink > 0) {
-      ctx.strokeStyle = palette.eye; ctx.lineWidth = 1.8; ctx.lineCap = 'round';
-      ctx.beginPath();
-      ctx.moveTo(-12, -22); ctx.quadraticCurveTo(-8, -19, -4, -22); ctx.stroke();
-      ctx.beginPath();
-      ctx.moveTo(12, -22); ctx.quadraticCurveTo(8, -19, 4, -22); ctx.stroke();
-    } else {
-      // eye whites
-      ctx.fillStyle = '#fff';
-      ellipse(-8, -22, 4, 5.4, true);
-      ellipse(8, -22, 4, 5.4, true);
-      // iris (warm brown)
-      ctx.fillStyle = palette.eyeIris;
-      ellipse(-8, -22, 3.4, 4.9, true);
-      ellipse(8, -22, 3.4, 4.9, true);
-      // pupil
-      ctx.fillStyle = palette.eye;
-      circle(-8, -21.5, 2.2);
-      circle(8, -21.5, 2.2);
-      // big sparkle
-      ctx.fillStyle = '#fff';
-      circle(-9.4, -23.7, 1.5);
-      circle(6.6, -23.7, 1.5);
-      // tiny lower sparkle
-      ctx.fillStyle = 'rgba(255,255,255,.85)';
-      circle(-6.4, -20.2, 0.8);
-      circle(9.6, -20.2, 0.8);
-      // upper lash flick
-      ctx.strokeStyle = palette.eye; ctx.lineWidth = 1.4; ctx.lineCap = 'round';
-      ctx.beginPath(); ctx.moveTo(-12, -25.5); ctx.quadraticCurveTo(-9, -27, -5, -26.2); ctx.stroke();
-      ctx.beginPath(); ctx.moveTo(12, -25.5); ctx.quadraticCurveTo(9, -27, 5, -26.2); ctx.stroke();
-    }
-
-    // Cheek blush
-    ctx.fillStyle = palette.blush;
-    ellipse(-13, -15, 3.6, 2.4, true);
-    ellipse(13, -15, 3.6, 2.4, true);
-
-    // Tiny nose dot
-    ctx.fillStyle = 'rgba(180,110,90,.4)';
-    circle(0, -15, 0.7);
-
-    // Mouth — cute smile
-    ctx.strokeStyle = palette.lip; ctx.lineWidth = 1.5; ctx.lineCap = 'round';
+    // Beautiful lips — slight pout
+    ctx.strokeStyle = '#c44068'; ctx.lineWidth = 1.3; ctx.lineCap = 'round';
     ctx.beginPath();
-    if (yang.happy > .1) {
-      // open happy smile
-      ctx.arc(0, -12, 3.4, 0.1, Math.PI - 0.1);
+    if (smile > .1) {
+      // open smile
+      ctx.arc(0, -11.5, 3.2, .06, Math.PI - .06);
       ctx.stroke();
-      ctx.fillStyle = '#ff7fa1';
-      ctx.beginPath();
-      ctx.arc(0, -11.5, 2.8, 0.25, Math.PI - 0.25);
-      ctx.fill();
-      // little tongue
-      ctx.fillStyle = '#ffc1d0';
-      ctx.beginPath();
-      ctx.arc(0, -10.6, 1.6, 0, Math.PI);
-      ctx.fill();
+      ctx.fillStyle = '#ff6e96';
+      ctx.beginPath(); ctx.arc(0, -10.8, 2.6, .15, Math.PI - .15); ctx.fill();
+      ctx.fillStyle = '#ffbdd2';
+      ctx.beginPath(); ctx.arc(0, -10, 1.4, 0, Math.PI); ctx.fill();
     } else {
-      ctx.arc(0, -12, 2.3, 0.2, Math.PI - 0.2);
+      // demure, slightly fuller lips
+      ctx.beginPath();
+      ctx.moveTo(-2.4, -12);
+      ctx.quadraticCurveTo(0, -11, 2.4, -12);
       ctx.stroke();
+      // lower lip fullness
+      ctx.fillStyle = '#e8557d';
+      ctx.beginPath();
+      ctx.ellipse(0, -11.5, 2, .9, 0, 0, Math.PI);
+      ctx.fill();
     }
 
-    // === Chinese 羊 charm on dress (un-mirrored) ===
+    // === 羊 charm on qipao ===
     ctx.save();
     ctx.scale(yang.face, 1);
-    ctx.fillStyle = 'rgba(168,118,88,.5)';
+    ctx.fillStyle = 'rgba(255,215,0,.55)';
     ctx.font = 'bold 9px serif';
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    ctx.fillText('羊', 0, 20);
+    ctx.fillText('羊', 0, 28);
     ctx.restore();
 
-    // happy sparkles when collecting
+    // sparkles
     if (yang.happy > 0.3) {
       ctx.save();
       ctx.scale(yang.face, 1);
-      ctx.fillStyle = `rgba(255,220,120,${yang.happy})`;
-      ctx.font = 'bold 14px system-ui';
+      ctx.fillStyle = `rgba(255,200,100,${yang.happy})`;
+      ctx.font = 'bold 15px system-ui';
       ctx.textAlign = 'center';
-      ctx.fillText('♪', -24 - yang.happy * 4, -46 - yang.happy * 6);
-      ctx.fillText('♡', 26 + yang.happy * 4, -42 - yang.happy * 6);
+      ctx.fillText('✦', -28 - yang.happy * 4, -50 - yang.happy * 6);
+      ctx.fillText('♡', 28 + yang.happy * 4, -46 - yang.happy * 6);
       ctx.restore();
     }
 
